@@ -1,10 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<link rel="icon" type="image/png" href="/AppMindAr/assets/LOGO%20SIED%20SOLO-01-BluIfg0u.png" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SIED - UNSJ | Realidad Aumentada</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/AppMindAr/assets/LOGO%20SIED%20SOLO-01-BluIfg0u.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIED - UNSJ | Realidad Aumentada</title>
+    <style>
+        /* Estilos para el menú de selección de tema */
+        .welcome-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .theme-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .cta-button {
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700; /* Usando el peso Bold de tu fuente Arida */
+            background: #0f3460;
+            border: 2px solid #4ecdc4;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        .cta-button:hover {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+    </style>
   <link rel="stylesheet" crossorigin href="/AppMindAr/assets/style-j0QPYYgb.css">
 </head>
 <body>
@@ -16,8 +46,12 @@
         </div>
         
         <h2>Proyecto Realidad Aumentada</h2>
-        <p class="subtitle">Explora el fascinante mundo de los dinosaurios, a través de tecnología de realidad aumentada.</p>
-        <a href="./dino.html" class="cta-button">Explora la RA</a>
+        <p class="subtitle">Selecciona un tema para explorar en Realidad Aumentada</p>
+        
+        <div class="theme-selector">
+            <a href="dino.html" class="cta-button">🦕 Dinosaurios</a>
+            <a href="minas.html" class="cta-button">⛏️ Ing. en Minas</a>
+        </div>
     </div>
 </div>
 </body>
