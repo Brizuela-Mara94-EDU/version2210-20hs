@@ -3,37 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/AppMindAr/assets/LOGO%20SIED%20SOLO-01-BluIfg0u.png" />
-  <title>AR Ingeniería en Minas</title>
+  <title>AR | Simulación Minera</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <!-- Importante: Enlazamos al nuevo archivo JS que crearemos a continuación -->
-  <script type="module" crossorigin src="/AppMindAr/assets/minas-CMG24I6z.js"></script>
+  <script type="module" crossorigin src="/AppMindAr/assets/minas-CrTJFDYH.js"></script>
   <link rel="modulepreload" crossorigin href="/AppMindAr/assets/GLTFLoader-PfjI8pFD.js">
-  <link rel="stylesheet" crossorigin href="/AppMindAr/assets/style-j0QPYYgb.css">
+  <link rel="stylesheet" crossorigin href="/AppMindAr/assets/style-CG52oawd.css">
 </head>
 <body>
-  <!-- Pantalla de inicio para la sección de minería -->
+  <!-- Pantalla de inicio rediseñada para un look más profesional -->
   <div class="ui-overlay">
-    <div class="intro-animation">
-      <h1 class="title-animated">⛏️ Ing. en Minas 💎</h1>
-      <div class="subtitle">Explora procesos clave de la minería en RA.</div>
-      <div class="instructions">
-          <div class="instruction-step"><span class="step-number">1</span><span>Presiona "Iniciar"</span></div>
-          <div class="instruction-step"><span class="step-number">2</span><span>Apunta a los marcadores</span></div>
-          <div class="instruction-step"><span class="step-number">3</span><span>¡Descubre los procesos!</span></div>
+    <div class="intro-container-professional">
+      <h1 class="main-title">Visualizador Minero</h1>
+      <h2 class="subtitle-professional">Realidad Aumentada para la Industria</h2>
+      
+      <div class="instructions-professional">
+        <p>Apunta tu cámara a un marcador para visualizar el modelo 3D correspondiente.</p>
       </div>
-      <button id="start-button">🚀 Iniciar Exploración</button>
+      
+      <button id="start-button" class="cta-button">
+        <span class="icon-camera"></span> Iniciar Simulación
+      </button>
     </div>
   </div>
 
-  <!-- UI de escaneo -->
+  <!-- UI de escaneo (sin cambios, ya es funcional) -->
   <div id="scanning-ui" class="hidden">
     <div class="search-indicator">
       <div class="scanner-animation"></div>
-      <div class="search-text">🔍 Buscando marcadores...</div>
+      <div class="search-text">Buscando marcadores...</div>
     </div>
   </div>
 
-  <!-- Panel de información del proceso minero -->
+  <!-- Panel de información (sin cambios en HTML) -->
   <div id="info-panel" class="hidden">
     <div class="info-content">
       <h3 id="info-name">Nombre del Proceso</h3>
@@ -42,7 +43,7 @@
     <button id="close-info-btn">✕</button>
   </div>
   
-  <!-- Contenedor donde vivirá la Realidad Aumentada -->
+  <!-- Contenedor AR (sin cambios) -->
   <div id="ar-container" style="display: none; width: 100%; height: 100vh;"></div>
 </body>
 </html>
