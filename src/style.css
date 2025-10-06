@@ -745,3 +745,104 @@ body {
     from { transform: translateX(0); }
     to { transform: translateX(-200px); }
 }
+/* ============================================= */
+/* == ESTILOS PARA LA NUEVA PANTALLA DE INICIO == */
+/* ============================================= */
+
+/* Contenedor principal de la intro profesional */
+.intro-container-professional {
+  color: #f0f0f0;
+  text-align: center;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: linear-gradient(160deg, #2c3e50, #1d2833); /* Fondo degradado oscuro y elegante */
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.main-title {
+  font-size: 2.5rem; /* 40px */
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle-professional {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 300;
+  margin: 0.5rem 0 2rem 0;
+  color: #bdc3c7; /* Un gris claro que complementa el fondo */
+  letter-spacing: 0.5px;
+}
+
+.instructions-professional {
+  font-size: 1rem;
+  max-width: 350px;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  color: #ecf0f1;
+}
+
+/* Botón de Llamado a la Acción (CTA) */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: #3498db; /* Un azul profesional y vibrante */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.cta-button:hover {
+  background: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(41, 128, 185, 0.5);
+}
+
+/* Icono de cámara para el botón (usando un truco de CSS) */
+.icon-camera {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  position: relative;
+}
+.icon-camera::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* Ajustes para la UI de escaneo para que combine */
+#scanning-ui .search-text {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
