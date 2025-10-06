@@ -6,31 +6,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.querySelector("#start-button");
     const arContainer = document.querySelector("#ar-container");
     
-    // Datos de modelos, ajusta 'scale' para que no sean demasiado grandes
-    const engineeringData = [
+    // Datos de los 6 modelos actualizados en el orden correcto
+    const modelData = [
+        { 
+            name: "Camión Volquete", 
+            file: "camionamarilloTelone.glb",
+            scale: 0.035,
+            description: "Camión volquete de gran capacidad utilizado para el transporte de material estéril y mineral dentro de la mina." 
+        },
+        { 
+            name: "Excavadora Hidráulica", 
+            file: "renderamarillo.glb",
+            scale: 0.035,
+            description: "Maquinaria pesada esencial para la carga de material en camiones. Su brazo hidráulico permite excavar y mover grandes volúmenes de tierra y roca." 
+        },
+        { 
+            name: "Formación Geológica", 
+            file: "openpitmine.glb",
+            scale: 0.035,
+            description: "Modelo de elevación digital que muestra una estructura geológica compleja, como un domo o anticlinal, con capas de roca plegadas y expuestas." 
+        },
         { 
             name: "Mina a Cielo Abierto", 
-            file: "minaAcieloAbierto.glb",
+            file: "minaacieloabierto.glb",
             scale: 0.035,
-            description: "Método de explotación donde se extraen minerales desde un gran rajo superficial. Los bancos y rampas forman una estructura escalonada." 
+            description: "Modelo 3D de una mina a cielo abierto. Este método extrae minerales desde un rajo superficial, creando bancos o terrazas escalonadas para la operación." 
         },
-        { 
-            name: "Mina Industrial", 
-            file: "minaIndustrial.glb",
-            scale: 0.03,
-            description: "Mina industrial subterránea que utiliza túneles y cámaras para acceder a los depósitos minerales profundos." 
+        {
+            name: "Lapislázuli",
+            file: "lapislazuli.glb",
+            scale: 0.05, // Escala un poco mayor para un objeto pequeño
+            description: "Muestra de Lapislázuli, una roca semipreciosa conocida por su intenso color azul, compuesta por lazurita, calcita y pirita."
         },
-        { 
-            name: "Mina Subterránea", 
-            file: "minaSubterranea.glb",
-            scale: 0.035,
-            description: "Mina subterránea que emplea métodos como el corte y relleno, o el hundimiento por bloques para extraer minerales." 
-        },
-        { 
-            name: "Mina a cielo Abierto con Equipos", 
-            file: "minaacieloabierto2.glb",
-            scale: 0.035,
-            description: "Mina a cielo abierto vista desde otro ángulo, mostrando maquinaria pesada utilizada en la extracción." 
+        {
+            name: "Wolframita",
+            file: "wolframita.glb",
+            scale: 0.05, // Escala un poco mayor para un objeto pequeño
+            description: "Espécimen de Wolframita, un mineral de tungsteno de color negro o gris oscuro con un característico brillo submetálico."
         }
     ];
 
@@ -54,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const { renderer, scene, camera } = mindarThree;
         const loader = new GLTFLoader();
 
-        // Luz ambiental mejorada y dos direccionales para mejor visibilidad desde cualquier ángulo
+        // Luz ambiental mejorada y dos direccionales para mejor visibilidad
         scene.add(new THREE.AmbientLight(0xffffff, 1.2));
         const dirLight1 = new THREE.DirectionalLight(0xfffbe0, 0.9);
         dirLight1.position.set(2, 3, 2);
@@ -63,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dirLight2.position.set(-2, 2, -2);
         scene.add(dirLight2);
 
-        const anchors = engineeringData.map((data, index) => {
+        const anchors = modelData.map((data, index) => {
             const anchor = mindarThree.addAnchor(index);
 
             loader.load(`${import.meta.env.BASE_URL}models/${data.file}`, (gltf) => {
@@ -71,21 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 model.scale.set(data.scale, data.scale, data.scale);
                 model.position.set(0, 0, 0);
                 anchor.group.add(model);
-                anchor.modelMain = model;
+                anchor.modelMain = model; // Guardamos referencia al modelo principal
             });
 
             anchor.onTargetFound = () => {
                 document.querySelector("#scanning-ui").classList.add("hidden");
                 currentModel = anchor.group;
-                // Selecciona el nodo para interacción
-                if (anchor.modelMain && anchor.modelMain.children.length > 0) {
-                    modelToRotate = anchor.modelMain.children[0];
-                } else if (anchor.modelMain) {
-                    modelToRotate = anchor.modelMain;
-                } else {
-                    modelToRotate = null;
-                }
-                showInfo(engineeringData[index]);
+                // Asignamos el modelo principal para la interacción
+                modelToRotate = anchor.modelMain;
+                showInfo(modelData[index]);
             };
 
             anchor.onTargetLost = () => {
@@ -115,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         closeBtn.addEventListener("click", hideInfo);
 
-        // Mejor interacción táctil: rotación con un dedo, zoom con dos dedos
+        // Interacción táctil: rotación con un dedo, zoom con dos dedos
         arContainer.addEventListener('touchstart', (e) => {
             if (modelToRotate) {
                 if (e.touches.length === 1) {
@@ -151,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         e.touches[0].clientY - e.touches[1].clientY
                     );
                     let scaleFactor = currentDistance / initialDistance;
-                    let newScale = Math.max(0.015, Math.min(0.08, initialScale * scaleFactor));
+                    let newScale = Math.max(0.01, Math.min(0.1, initialScale * scaleFactor)); // Límites de zoom ajustados
                     modelToRotate.scale.set(newScale, newScale, newScale);
                 }
             }
