@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         { 
             name: "Camión Volquete", 
             file: "camionamarilloTelone.glb",
-            scale: 0.65,
+            scale: 0.5,
             description: "Camión volquete de gran capacidad utilizado para el transporte de material estéril y mineral dentro de la mina." 
         },
         { 
             name: "Excavadora Hidráulica", 
             file: "renderamarillo.glb",
-            scale: 0.65,
+            scale: 0.5,
             description: "Maquinaria pesada esencial para la carga de material en camiones. Su brazo hidráulico permite excavar y mover grandes volúmenes de tierra y roca." 
         },
         { 
@@ -29,13 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
         { 
             name: "Mina a Cielo Abierto", 
             file: "minaacieloabierto.glb",
-            scale: 0.01,
+            scale: 0.005,
             description: "Modelo 3D de una mina a cielo abierto. Este método extrae minerales desde un rajo superficial, creando bancos o terrazas escalonadas para la operación." 
         },
         {
             name: "Oro",
             file: "oro.glb", // Archivo cambiado
-            scale: 0.55, 
+            scale: 0.5, 
             description: "Muestra de Oro, un metal precioso muy valorado por su brillo y rareza. Es un elemento clave en la minería mundial." // Descripción cambiada
         },
         {
