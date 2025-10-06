@@ -6,75 +6,8 @@
   <title>AR Ingeniería en Minas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="/src/style.css">
+  <!-- Importante: Enlazamos al nuevo archivo JS que crearemos a continuación -->
   <script type="module" src="/src/minas.js"></script>
-
-  <!-- ========= INICIO: ESTILOS PROFESIONALES PARA MINERÍA ========= -->
-  <style>
-    /* Sobrescribimos los estilos infantiles de style.css */
-    .title-animated {
-      font-size: 2.5rem; /* Un poco más pequeño y sobrio */
-      color: #FFFFFF;
-      background: none; /* Quitamos el gradiente de colores */
-      -webkit-text-fill-color: initial; /* Restauramos el color de relleno del texto */
-      animation: none; /* Quitamos la animación del gradiente */
-      text-shadow: 0 0 10px rgba(78, 205, 196, 0.5); /* Un brillo sutil de un solo color */
-    }
-
-    .ui-overlay {
-      /* Un fondo más técnico, azul oscuro */
-      background: linear-gradient(135deg, #0D1B2A, #1B263B, #415A77);
-    }
-
-    #start-button {
-      /* Botón con un estilo más "serio" */
-      background-color: transparent;
-      border: 2px solid #E0E1DD;
-      color: #E0E1DD;
-      font-weight: 700;
-    }
-
-    #start-button:hover {
-      background-color: #E0E1DD;
-      color: #0D1B2A;
-    }
-
-    /* Panel de información con estilo de "Blueprint" o plano */
-    #info-panel {
-      background-color: rgba(13, 27, 42, 0.9); /* Fondo azul oscuro casi opaco */
-      border-left: 5px solid #FF9F1C; /* Un acento de color naranja industrial */
-      border-radius: 0;
-      bottom: 0;
-      right: 0;
-      top: auto;
-      width: 100%;
-      max-width: 100%;
-      transform: translateY(100%);
-      animation: slideUpPanel 0.5s forwards;
-    }
-    
-    #info-panel.hidden {
-      animation: slideDownPanel 0.5s forwards;
-    }
-
-    #info-panel #info-name {
-      color: #FF9F1C; /* Título del panel en naranja */
-    }
-
-    #close-info-btn {
-      color: #FFFFFF;
-    }
-
-    @keyframes slideUpPanel {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    @keyframes slideDownPanel {
-      from { transform: translateY(0); }
-      to { transform: translateY(100%); }
-    }
-  </style>
-  <!-- ========= FIN: ESTILOS PROFESIONALES PARA MINERÍA ========= -->
-
 </head>
 <body>
   <!-- Pantalla de inicio para la sección de minería -->

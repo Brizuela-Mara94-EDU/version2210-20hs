@@ -6,38 +6,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.querySelector("#start-button");
     const arContainer = document.querySelector("#ar-container");
 
-    // ==========================================================
-    // Datos de los modelos con los nombres de archivo correctos
-    // ==========================================================
+    // Revisa y ajusta la escala y posición de cada modelo aquí si alguno se ve demasiado grande o fuera de lugar
     const engineeringData = [
         { 
             name: "Mina a Cielo Abierto", 
             file: "minaAcieloAbierto.glb",
-            scale: 0.1, 
+            scale: 0.05, // Más pequeño que antes
+            position: [0, 0, 0], // Centrado
             description: "Método de explotación donde se extraen minerales desde un gran rajo superficial. Los bancos y rampas forman una estructura escalonada." 
         },
         { 
             name: "Mina Industrial", 
             file: "minaIndustrial.glb",
-            scale: 0.05, 
+            scale: 0.04, // Más pequeño
+            position: [0, 0, 0], // Centrado
             description: "Mina industrial subterránea que utiliza túneles y cámaras para acceder a los depósitos minerales profundos." 
         },
         { 
             name: "Mina Subterránea", 
             file: "minaSubterranea.glb",
-            scale: 0.1, 
+            scale: 0.05,
+            position: [0, 0, 0], // Centrado
             description: "Mina subterránea que emplea métodos como el corte y relleno, o el hundimiento por bloques para extraer minerales." 
         },
         { 
             name: "Mina a cielo Abierto con Equipos", 
             file: "minaacieloabierto2.glb",
-            scale: 0.1, 
+            scale: 0.05,
+            position: [0, 0, 0], // Centrado
             description: "Mina a cielo abierto vista desde otro ángulo, mostrando maquinaria pesada utilizada en la extracción." 
         }
     ];
-    // ==========================================================
 
-    let currentModel = null; // Variable para saber qué modelo está visible
+    let currentModel = null; // Referencia al modelo visible
+    let modelToRotate = null; // Referencia al nodo que vamos a rotar (puede ser hijo)
 
     const startAR = async () => {
         document.querySelector(".ui-overlay").style.display = "none";
@@ -60,22 +62,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const anchors = engineeringData.map((data, index) => {
             const anchor = mindarThree.addAnchor(index);
             
-            // CORREGIDO: Ruta sin la carpeta "minas", como tú lo tienes.
             loader.load(`${import.meta.env.BASE_URL}models/${data.file}`, (gltf) => {
                 const model = gltf.scene;
                 model.scale.set(data.scale, data.scale, data.scale);
-                model.position.set(0, -0.2, 0);
+                model.position.set(...data.position);
                 anchor.group.add(model);
+                // Guardamos referencia al modelo principal, pero también al hijo si existe
+                anchor.modelMain = model;
             });
 
             anchor.onTargetFound = () => {
                 document.querySelector("#scanning-ui").classList.add("hidden");
-                currentModel = anchor.group; 
-                showInfo(data);
+                currentModel = anchor.group;
+
+                // Buscamos el nodo correcto para rotar
+                // Si el modelo tiene hijos, rotamos el primero; si no, rotamos el principal
+                if (anchor.modelMain && anchor.modelMain.children.length > 0) {
+                    modelToRotate = anchor.modelMain.children[0];
+                } else if (anchor.modelMain) {
+                    modelToRotate = anchor.modelMain;
+                } else {
+                    modelToRotate = null;
+                }
+
+                showInfo(engineeringData[index]);
             };
 
             anchor.onTargetLost = () => {
                 currentModel = null;
+                modelToRotate = null;
                 if (!document.querySelector(".ui-overlay").style.display === "none") {
                    document.querySelector("#scanning-ui").classList.remove("hidden");
                 }
@@ -102,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         closeBtn.addEventListener("click", hideInfo);
 
-        // ========= INICIO: LÓGICA DE CONTROL TÁCTIL =========
+        // ========= INICIO: LÓGICA DE CONTROL TÁCTIL MEJORADA =========
         let touchStartX = 0;
         let isDragging = false;
 
@@ -119,13 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         arContainer.addEventListener('touchmove', (e) => {
             e.preventDefault(); 
-            if (isDragging && currentModel && e.touches.length === 1) {
+            if (isDragging && modelToRotate && e.touches.length === 1) {
                 const deltaX = e.touches[0].clientX - touchStartX;
-                currentModel.rotation.y += deltaX * 0.01;
+                modelToRotate.rotation.y += deltaX * 0.01;
                 touchStartX = e.touches[0].clientX;
             }
         }, { passive: false });
-        // ========= FIN: LÓGICA DE CONTROL TÁCTIL =========
+        // ========= FIN: LÓGICA DE CONTROL TÁCTIL MEJORADA =========
 
         await mindarThree.start();
 

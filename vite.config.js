@@ -7,7 +7,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        dino: resolve(__dirname, 'dino.html')
+        dino: resolve(__dirname, 'dino.html'),
+        minas: resolve(__dirname, 'minas.html')
       }
     }
   }
