@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         { 
             name: "Camión Volquete", 
             file: "camionamarilloTelone.glb",
-            scale: 0.035,
+            scale: 0.05,
             description: "Camión volquete de gran capacidad utilizado para el transporte de material estéril y mineral dentro de la mina." 
         },
         { 
             name: "Excavadora Hidráulica", 
             file: "renderamarillo.glb",
-            scale: 0.035,
+            scale: 0.05,
             description: "Maquinaria pesada esencial para la carga de material en camiones. Su brazo hidráulico permite excavar y mover grandes volúmenes de tierra y roca." 
         },
         { 
@@ -29,19 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
         { 
             name: "Mina a Cielo Abierto", 
             file: "minaacieloabierto.glb",
-            scale: 0.035,
+            scale: 0.02,
             description: "Modelo 3D de una mina a cielo abierto. Este método extrae minerales desde un rajo superficial, creando bancos o terrazas escalonadas para la operación." 
         },
         {
             name: "Lapislázuli",
             file: "lapislazuli.glb",
-            scale: 0.05, // Escala un poco mayor para un objeto pequeño
+            scale: 0.1, // Escala un poco mayor para un objeto pequeño
             description: "Muestra de Lapislázuli, una roca semipreciosa conocida por su intenso color azul, compuesta por lazurita, calcita y pirita."
         },
         {
             name: "Wolframita",
             file: "wolframita.glb",
-            scale: 0.05, // Escala un poco mayor para un objeto pequeño
+            scale: 0.75, // Escala un poco mayor para un objeto pequeño
             description: "Espécimen de Wolframita, un mineral de tungsteno de color negro o gris oscuro con un característico brillo submetálico."
         }
     ];
