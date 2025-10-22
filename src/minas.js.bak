@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { MindARThree } from 'mind-ar/dist/mindar-image-three.prod.js';
+// IMPORT REMOVIDO: reemplazado por ar.js
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 document.addEventListener('DOMContentLoaded', () => {

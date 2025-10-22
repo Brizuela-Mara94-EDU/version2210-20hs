@@ -5,10 +5,9 @@
   <meta charset="UTF-8" />
   <title>Experiencia AR - Dinos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" crossorigin href="/AppMindAr/assets/index-DyFwxwk2.css">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
-
 </head>
 
 <body>
@@ -425,167 +424,193 @@
   });
 
   function initAR() {
-    if (sceneEl && sceneEl.parentNode) {
-      arContainer.removeChild(sceneEl);
-    }
+  if (sceneEl && sceneEl.parentNode) {
+    arContainer.removeChild(sceneEl);
+  }
+  
+  sceneEl = document.createElement('a-scene');
+  
+  const arjsConfig = [
+    `sourceType: webcam`,
+    `sourceWidth: ${isMobile ? 640 : 1280}`,
+    `sourceHeight: ${isMobile ? 480 : 960}`,
+    `displayWidth: ${isMobile ? 640 : 1280}`,
+    `displayHeight: ${isMobile ? 480 : 960}`,
+    `trackingMethod: best`,
+    `detectionMode: mono_and_matrix`,
+    `matrixCodeType: 3x3`,
+    `debugUIEnabled: false`,
+    `minConfidence: 0.1`,                 // 🔧 más sensible, detecta antes
+    `maxDetectionRate: 45`,               // 🔧 mejor rendimiento
+    `canvasWidth: ${isMobile ? 480 : 640}`,
+    `canvasHeight: ${isMobile ? 360 : 480}`,
+    `cameraParametersUrl: https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/data/data/camera_para.dat`
+  ].join('; ');
+  
+  sceneEl.setAttribute('arjs', arjsConfig);
+  sceneEl.setAttribute('renderer', 'logarithmicDepthBuffer: true; colorManagement: true; antialias: true; physicallyCorrectLights: true;');
+  sceneEl.setAttribute('vr-mode-ui', 'enabled: false');
+  sceneEl.setAttribute('embedded', '');
+  sceneEl.setAttribute('loading-screen', 'enabled: false');
+
+  // 🔧 Estilos para asegurar que el video y la escena sean visibles
+  sceneEl.style.position = 'absolute';
+  sceneEl.style.top = '0';
+  sceneEl.style.left = '0';
+  sceneEl.style.width = '100%';
+  sceneEl.style.height = '100%';
+  sceneEl.style.zIndex = '1';
+  arContainer.style.position = 'relative';
+  arContainer.style.width = '100%';
+  arContainer.style.height = '100vh';
+  arContainer.style.background = 'black';
+
+  arContainer.appendChild(sceneEl);
+  
+  const assets = document.createElement('a-assets');
+  assets.innerHTML = `
+    <a-asset-item id="brachiosaurus" src="/AppMindAr/arjs/models/brachiosaurus.glb"></a-asset-item>
+    <a-asset-item id="trex" src="/AppMindAr/arjs/models/trex.glb"></a-asset-item>
+    <a-asset-item id="triceratops" src="/AppMindAr/arjs/models/triceratops.glb"></a-asset-item>
+    <a-asset-item id="velociraptor" src="/AppMindAr/arjs/models/velociraptor.glb"></a-asset-item>
+    <a-asset-item id="stegosaurio" src="/AppMindAr/arjs/models/stegosaurio.glb"></a-asset-item>
+    <a-asset-item id="ankylosaurio" src="/AppMindAr/arjs/models/ankylosaurus.glb"></a-asset-item>
+  `;
+  sceneEl.appendChild(assets);
+
+  const ambientLight = document.createElement('a-light');
+  ambientLight.setAttribute('type', 'ambient');
+  ambientLight.setAttribute('color', '#FFF');
+  ambientLight.setAttribute('intensity', '1.2');
+  sceneEl.appendChild(ambientLight);
+
+  const directionalLight = document.createElement('a-light');
+  directionalLight.setAttribute('type', 'directional');
+  directionalLight.setAttribute('color', '#FFF');
+  directionalLight.setAttribute('intensity', '1.5');
+  directionalLight.setAttribute('position', '-1 1 1');
+  sceneEl.appendChild(directionalLight);
+
+  const directionalLight2 = document.createElement('a-light');
+  directionalLight2.setAttribute('type', 'directional');
+  directionalLight2.setAttribute('color', '#FFF');
+  directionalLight2.setAttribute('intensity', '0.8');
+  directionalLight2.setAttribute('position', '1 1 -1');
+  sceneEl.appendChild(directionalLight2);
+
+  for (let i = 0; i <= 5; i++) {
+    const marker = document.createElement('a-marker');
+    marker.setAttribute('class', 'dino-marker');
+    marker.setAttribute('data-model-index', i);
+    marker.setAttribute('type', 'barcode');
+    marker.setAttribute('value', i);
+    marker.setAttribute('emitevents', 'true');
+    marker.setAttribute('smooth', 'true');
+    marker.setAttribute('smoothCount', i === 1 ? '3' : '5');
+    marker.setAttribute('smoothTolerance', i === 1 ? '0.005' : '0.01');
+    marker.setAttribute('smoothThreshold', i === 1 ? '1' : '2');
+    sceneEl.appendChild(marker);
+  }
+
+  const camera = document.createElement('a-entity');
+  camera.setAttribute('camera', '');
+  sceneEl.appendChild(camera);
+  
+  updateDetectionStatus("Buscando marcadores...");
+  isModelPlaced = false;
+
+  sceneEl.addEventListener('loaded', () => {
+    updateDetectionStatus("Listo para escanear");
     
-    sceneEl = document.createElement('a-scene');
-    
-    const arjsConfig = [
-      `sourceType: webcam`,
-      `sourceWidth: ${isMobile ? 640 : 1280}`,
-      `sourceHeight: ${isMobile ? 480 : 960}`,
-      `displayWidth: ${isMobile ? 640 : 1280}`,
-      `displayHeight: ${isMobile ? 480 : 960}`,
-      `trackingMethod: best`,
-      `detectionMode: mono_and_matrix`,
-      `matrixCodeType: 3x3`,
-      `debugUIEnabled: false`,
-      `minConfidence: 0.15`,
-      `maxDetectionRate: 90`,
-      `canvasWidth: ${isMobile ? 480 : 640}`,
-      `canvasHeight: ${isMobile ? 360 : 480}`,
-      `cameraParametersUrl: https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/data/data/camera_para.dat`
-    ].join('; ');
-    
-    sceneEl.setAttribute('arjs', arjsConfig);
-    sceneEl.setAttribute('renderer', 'logarithmicDepthBuffer: true; colorManagement: true; antialias: true; physicallyCorrectLights: true;');
-    sceneEl.setAttribute('vr-mode-ui', 'enabled: false');
-    sceneEl.setAttribute('embedded', '');
-    sceneEl.setAttribute('loading-screen', 'enabled: false');
-
-    arContainer.appendChild(sceneEl);
-    
-    const assets = document.createElement('a-assets');
-    assets.innerHTML = `
-      <a-asset-item id="brachiosaurus" src="/AppMindAr/arjs/models/brachiosaurus.glb"></a-asset-item>
-      <a-asset-item id="trex" src="/AppMindAr/arjs/models/trex.glb"></a-asset-item>
-      <a-asset-item id="triceratops" src="/AppMindAr/arjs/models/triceratops.glb"></a-asset-item>
-      <a-asset-item id="velociraptor" src="/AppMindAr/arjs/models/velociraptor.glb"></a-asset-item>
-      <a-asset-item id="stegosaurio" src="/AppMindAr/arjs/models/stegosaurio.glb"></a-asset-item>
-      <a-asset-item id="ankylosaurio" src="/AppMindAr/arjs/models/ankylosaurus.glb"></a-asset-item>
-    `;
-    sceneEl.appendChild(assets);
-
-    const ambientLight = document.createElement('a-light');
-    ambientLight.setAttribute('type', 'ambient');
-    ambientLight.setAttribute('color', '#FFF');
-    ambientLight.setAttribute('intensity', '1.2');
-    sceneEl.appendChild(ambientLight);
-
-    const directionalLight = document.createElement('a-light');
-    directionalLight.setAttribute('type', 'directional');
-    directionalLight.setAttribute('color', '#FFF');
-    directionalLight.setAttribute('intensity', '1.5');
-    directionalLight.setAttribute('position', '-1 1 1');
-    sceneEl.appendChild(directionalLight);
-
-    const directionalLight2 = document.createElement('a-light');
-    directionalLight2.setAttribute('type', 'directional');
-    directionalLight2.setAttribute('color', '#FFF');
-    directionalLight2.setAttribute('intensity', '0.8');
-    directionalLight2.setAttribute('position', '1 1 -1');
-    sceneEl.appendChild(directionalLight2);
-
-    for (let i = 0; i <= 5; i++) {
-      const marker = document.createElement('a-marker');
-      marker.setAttribute('class', 'dino-marker');
-      marker.setAttribute('data-model-index', i);
-      marker.setAttribute('type', 'barcode');
-      marker.setAttribute('value', i);
-      marker.setAttribute('emitevents', 'true');
-      marker.setAttribute('smooth', 'true');
-      marker.setAttribute('smoothCount', i === 1 ? '3' : '5');
-      marker.setAttribute('smoothTolerance', i === 1 ? '0.005' : '0.01');
-      marker.setAttribute('smoothThreshold', i === 1 ? '1' : '2');
-      sceneEl.appendChild(marker);
-    }
-
-    const camera = document.createElement('a-entity');
-    camera.setAttribute('camera', '');
-    sceneEl.appendChild(camera);
-    
-    updateDetectionStatus("Buscando marcadores...");
-    isModelPlaced = false;
-
-    sceneEl.addEventListener('loaded', () => {
-      updateDetectionStatus("Listo para escanear");
-      
-      const markers = document.querySelectorAll('.dino-marker');
-      markers.forEach(marker => {
-        marker.addEventListener('markerFound', (event) => {
-          if (isModelPlaced) return;
-          
-          const modelIndex = marker.getAttribute('data-model-index');
-          console.log('🦖 Marcador encontrado:', modelIndex);
-          updateDetectionStatus(`¡Eureka! Dino ${modelIndex} encontrado!`);
-          
-          const modelConfig = modelInfo[modelIndex];
-          if (!modelConfig) return;
-          
-          const scaleToUse = isMobile ? modelConfig.scaleMobile : modelConfig.scale;
-          const positionToUse = isMobile && modelConfig.positionMobile ? modelConfig.positionMobile : modelConfig.position;
-          
-          const placedModel = document.createElement('a-entity');
-          placedModel.setAttribute('class', 'placed-model');
-          placedModel.setAttribute('gltf-model', getModelFile(modelIndex));
-          placedModel.setAttribute('scale', scaleToUse);
-          placedModel.setAttribute('data-base-scale', scaleToUse);
-          placedModel.setAttribute('rotation', modelConfig.rotation);
-          placedModel.setAttribute('animation-mixer', '');
-          
-          const camera = document.querySelector('a-entity[camera]');
-          placedModel.setAttribute('position', positionToUse);
-          camera.appendChild(placedModel);
-          
-          isModelPlaced = true;
-          currentScale = 1;
-          
-          setupInteractiveControls(placedModel);
-          
-          if (scanningUI) scanningUI.classList.add("hidden");
-          if (restartButton) restartButton.classList.remove("hidden");
-          
-          showInfoButton();
-          
-          const info = modelInfo[modelIndex];
-          if (info) {
-            document.getElementById('dino-name').textContent = `${info.emoji} ${info.name}`;
-            document.getElementById('dino-description').textContent = info.description;
-            
-            if (!isMobile) {
-              dinoInfoPanel.classList.remove('hidden');
-              console.log('📱 Panel mostrado en desktop');
-            } else {
-              console.log('📱 Esperando interacción del botón en móvil');
-            }
-          }
-          
-          try {
-            roarAudio.currentTime = 0;
-            roarAudio.play().catch(e => console.log('Error al reproducir audio:', e));
-          } catch(e) {
-            console.log('Error con audio:', e);
-          }
-        });
+    const markers = document.querySelectorAll('.dino-marker');
+    markers.forEach(marker => {
+      marker.addEventListener('markerFound', (event) => {
+        if (isModelPlaced) return;
         
-        marker.addEventListener('markerLost', () => {
-          const modelIndex = marker.getAttribute('data-model-index');
-          console.log('Marcador perdido:', modelIndex);
-        });
+        const modelIndex = marker.getAttribute('data-model-index');
+        console.log('🦖 Marcador encontrado:', modelIndex);
+        updateDetectionStatus(`¡Eureka! Dino ${modelIndex} encontrado!`);
+        
+        const modelConfig = modelInfo[modelIndex];
+        if (!modelConfig) return;
+        
+        const scaleToUse = isMobile ? modelConfig.scaleMobile : modelConfig.scale;
+        const positionToUse = isMobile && modelConfig.positionMobile ? modelConfig.positionMobile : modelConfig.position;
+        
+        const placedModel = document.createElement('a-entity');
+        placedModel.setAttribute('class', 'placed-model');
+        placedModel.setAttribute('gltf-model', getModelFile(modelIndex));
+        placedModel.setAttribute('scale', scaleToUse);
+        placedModel.setAttribute('data-base-scale', scaleToUse);
+        placedModel.setAttribute('rotation', modelConfig.rotation);
+        placedModel.setAttribute('animation-mixer', '');
+        
+        const camera = document.querySelector('a-entity[camera]');
+        placedModel.setAttribute('position', positionToUse);
+        camera.appendChild(placedModel);
+        
+        isModelPlaced = true;
+        currentScale = 1;
+        
+        setupInteractiveControls(placedModel);
+        
+        if (scanningUI) scanningUI.classList.add("hidden");
+        if (restartButton) restartButton.classList.remove("hidden");
+        
+        showInfoButton();
+        
+        const info = modelInfo[modelIndex];
+        if (info) {
+          document.getElementById('dino-name').textContent = `${info.emoji} ${info.name}`;
+          document.getElementById('dino-description').textContent = info.description;
+          
+          if (!isMobile) {
+            dinoInfoPanel.classList.remove('hidden');
+            console.log('📱 Panel mostrado en desktop');
+          } else {
+            console.log('📱 Esperando interacción del botón en móvil');
+          }
+        }
+        
+        try {
+          roarAudio.currentTime = 0;
+          roarAudio.play().catch(e => console.log('Error al reproducir audio:', e));
+        } catch(e) {
+          console.log('Error con audio:', e);
+        }
+      });
+      
+      marker.addEventListener('markerLost', () => {
+        const modelIndex = marker.getAttribute('data-model-index');
+        console.log('Marcador perdido:', modelIndex);
       });
     });
+  });
 
-    sceneEl.addEventListener('arjs-video-loaded', (event) => {
-      console.log('✅ Video AR.js cargado correctamente');
-      updateDetectionStatus("Cámara activa - Busca un marcador");
-    });
-    
-    sceneEl.addEventListener('camera-error', (error) => {
-      console.error('❌ Error de cámara AR.js:', error);
-      updateDetectionStatus("Error: No se puede acceder a la cámara");
-    });
-  }
+  sceneEl.addEventListener('arjs-video-loaded', (event) => {
+    console.log('✅ Video AR.js cargado correctamente');
+    updateDetectionStatus("Cámara activa - Busca un marcador");
+
+    // 🔧 Forzar visibilidad del video
+    const video = document.querySelector('video');
+    if (video) {
+      video.style.display = 'block';
+      video.style.position = 'absolute';
+      video.style.top = '0';
+      video.style.left = '0';
+      video.style.width = '100%';
+      video.style.height = '100%';
+      video.style.objectFit = 'cover';
+      video.style.zIndex = '0';
+    }
+  });
+  
+  sceneEl.addEventListener('camera-error', (error) => {
+    console.error('❌ Error de cámara AR.js:', error);
+    updateDetectionStatus("Error: No se puede acceder a la cámara");
+  });
+}
+
 
   if (restartButton) {
     restartButton.addEventListener("click", () => {
