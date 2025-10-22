@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <title>Experiencia AR - Dinos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/style.css">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
 
@@ -182,7 +182,7 @@
     }
   };
 
-  const roarAudio = new Audio('sounds/roar.mp3');
+  const roarAudio = new Audio('/AppMindAr/sounds/roar.mp3');
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   function setupInteractiveControls(model) {
@@ -456,16 +456,21 @@
 
     arContainer.appendChild(sceneEl);
     
+    const baseURL = `${window.location.origin}/AppMindAr/models/`;
+
     const assets = document.createElement('a-assets');
     assets.innerHTML = `
-      <a-asset-item id="brachiosaurus" src="/arjs/models/brachiosaurus.glb"></a-asset-item>
-      <a-asset-item id="trex" src="/arjs/models/trex.glb"></a-asset-item>
-      <a-asset-item id="triceratops" src="/arjs/models/triceratops.glb"></a-asset-item>
-      <a-asset-item id="velociraptor" src="/arjs/models/velociraptor.glb"></a-asset-item>
-      <a-asset-item id="stegosaurio" src="/arjs/models/stegosaurio.glb"></a-asset-item>
-      <a-asset-item id="ankylosaurio" src="/arjs/models/ankylosaurus.glb"></a-asset-item>
+      <a-asset-item id="brachiosaurus" crossorigin="anonymous" src="${baseURL}brachiosaurus.glb"></a-asset-item>
+      <a-asset-item id="trex" crossorigin="anonymous" src="${baseURL}trex.glb"></a-asset-item>
+      <a-asset-item id="triceratops" crossorigin="anonymous" src="${baseURL}triceratops.glb"></a-asset-item>
+      <a-asset-item id="velociraptor" crossorigin="anonymous" src="${baseURL}velociraptor.glb"></a-asset-item>
+      <a-asset-item id="stegosaurio" crossorigin="anonymous" src="${baseURL}stegosaurio.glb"></a-asset-item>
+      <a-asset-item id="ankylosaurio" crossorigin="anonymous" src="${baseURL}ankylosaurus.glb"></a-asset-item>
     `;
     sceneEl.appendChild(assets);
+
+
+
 
     const ambientLight = document.createElement('a-light');
     ambientLight.setAttribute('type', 'ambient');
