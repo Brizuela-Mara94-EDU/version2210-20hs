@@ -10,14 +10,14 @@ export default defineConfig(({ command }) => {
     };
   } else {
     return {
-      base: '/AppMindAr/', // tu repo en GitHub Pages
+      base: '/version2210-20hs/', // tu repo en GitHub Pages
       build: {
         outDir: 'docs',      // <- build final va a docs/
         rollupOptions: {
           input: {
             main: resolve(__dirname, 'index.html'),
             dino: resolve(__dirname, 'dino.html'),
-            minas: resolve(__dirname, 'minas.html'),
+            mining: resolve(__dirname, 'mining.html'),
             elements: resolve(__dirname, 'elements.html'),
             scanner: resolve(__dirname, 'scanner.html'),
             'arjs-scanner': resolve(__dirname, 'arjs-scanner.html')
