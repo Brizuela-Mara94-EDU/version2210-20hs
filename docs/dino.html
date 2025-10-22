@@ -456,7 +456,7 @@
 
     arContainer.appendChild(sceneEl);
     
-    const baseURL = `${window.location.origin}/AppMindAr/docs/models/`;
+    const baseURL = `${window.location.origin}/AppMindAr/models/`;
 
     const assets = document.createElement('a-assets');
     assets.innerHTML = `
@@ -468,6 +468,7 @@
       <a-asset-item id="ankylosaurio" crossorigin="anonymous" src="${baseURL}ankylosaurus.glb"></a-asset-item>
     `;
     sceneEl.appendChild(assets);
+
 
 
 
