@@ -658,7 +658,7 @@
   </div>
 
   <header>
-    <img src="/assets/logo%20sied%20horizontal-02-BF-xqR4y.png" class="header-logo" alt="SIED Logo">
+    <img src="./assets/logo sied horizontal-02-BF-xqR4y.png" class="header-logo" alt="SIED Logo">
   </header>
 
   <div class="layout">
@@ -672,7 +672,7 @@
       <div class="machine-category" id="machineCategory">MAQUINARIA</div>
 
       <div id="machineWrapper" class="machine-wrap fade-in">
-        <img id="machineImage" class="machine-img" src="/assets/tunel.png" alt="Excavadora" />
+        <img id="machineImage" class="machine-img" src="./assets/tunel.png" alt="Excavadora" />
       </div>
 
       <h2 id="machineName" class="machine-name">Excavadora hidráulica</h2>
@@ -700,12 +700,12 @@
         <div class="mobile-section">
           <h3>Modo AR</h3>
           <div class="ar-mode-selector">
-            <label class="mode-label">
-              <input type="radio" name="arModeMobile" value="mindar" checked id="modeMindARMobile">
+            <!--<label class="mode-label">
+              <input type="radio" name="arModeMobile" value="mindar" id="modeMindARMobile">
               <span class="mode-text">📦 MindAR</span>
-            </label>
+            </label>-->
             <label class="mode-label">
-              <input type="radio" name="arModeMobile" value="arjs" id="modeARjsMobile">
+              <input type="radio" name="arModeMobile" value="arjs" checked id="modeARjsMobile">
               <span class="mode-text">🔲 AR.js</span>
             </label>
           </div>
@@ -732,13 +732,13 @@
         <div class="spec-row"><div class="spec-label">Aplicación</div><div class="spec-val" id="specApplication">Minería a cielo abierto</div></div>
         
         <div class="ar-mode-selector">
-          <label class="mode-label">
-            <input type="radio" name="arMode" value="mindar" checked id="modeMindAR">
+          <!--<label class="mode-label">
+            <input type="radio" name="arMode" value="mindar" id="modeMindAR">
             <span class="mode-text">📦 MindAR (Marcadores compilados)</span>
-          </label>
+          </label>-->
           <label class="mode-label">
-            <input type="radio" name="arMode" value="arjs" id="modeARjs">
-            <span class="mode-text">� AR.js (Códigos de barras)</span>
+            <input type="radio" name="arMode" value="arjs" checked id="modeARjs">
+            <span class="mode-text">🔲 AR.js (Códigos de barras)</span>
           </label>
         </div>
         <button class="ar-btn" id="arBtn">Ver en Realidad Aumentada</button>
@@ -751,25 +751,25 @@
   <script>
     const machines = [
       // ✅ ACTIVOS - Con marcadores (10 elementos)
-      { name:"Túnel de Acceso", group:"Infraestructura", category:"Entrada de Mina", image:"/assets/tunel.png", description:"Entrada fortificada para acceso a la mina subterránea. Estructura reforzada con soportes metálicos y sistemas de ventilación integrados para garantizar operaciones seguras.", capacity:"4.5 m altura", power:"N/A", weight:"Estructura fija", application:"Minería subterránea", arMarker:"tunel" },
+      { name:"Túnel de Acceso", group:"Infraestructura", category:"Entrada de Mina", image:"./assets/tunel.png", description:"Entrada fortificada para acceso a la mina subterránea. Estructura reforzada con soportes metálicos y sistemas de ventilación integrados para garantizar operaciones seguras.", capacity:"4.5 m altura", power:"N/A", weight:"Estructura fija", application:"Minería subterránea", arMarker:"tunel" },
       
-      { name:"Máquina Araña", group:"Maquinaria", category:"Perforación", image:"/assets/garras.png", description:"Equipo de perforación especializado con brazos articulados tipo araña. Permite perforación en túneles y espacios confinados con alta precisión y estabilidad.", capacity:"12-15 m³", power:"450 HP", weight:"45,000 kg", application:"Perforación en túneles", arMarker:"garras" },
+      { name:"Máquina Araña", group:"Maquinaria", category:"Perforación", image:"./assets/garras.png", description:"Equipo de perforación especializado con brazos articulados tipo araña. Permite perforación en túneles y espacios confinados con alta precisión y estabilidad.", capacity:"12-15 m³", power:"450 HP", weight:"45,000 kg", application:"Perforación en túneles", arMarker:"garras" },
       
-      { name:"Camión Minero", group:"Transporte", category:"Transporte", image:"/assets/carga.png", description:"Camión ultra clase diseñado para transporte de material pesado en grandes distancias. Capacidad máxima de carga para operaciones mineras a gran escala.", capacity:"363 t", power:"4,000 HP", weight:"687,000 kg", application:"Transporte de mineral", arMarker:"camion" },
+      { name:"Camión Minero", group:"Transporte", category:"Transporte", image:"./assets/carga.png", description:"Camión ultra clase diseñado para transporte de material pesado en grandes distancias. Capacidad máxima de carga para operaciones mineras a gran escala.", capacity:"363 t", power:"4,000 HP", weight:"687,000 kg", application:"Transporte de mineral", arMarker:"camion" },
       
-      { name:"Perforadora Rotativa", group:"Equipamiento", category:"Perforación", image:"/assets/perforadora.png", description:"Equipo de perforación de alto rendimiento para barrenos de voladura. Sistema rotativo de precisión para operaciones de exploración y extracción.", capacity:"311 mm diámetro", power:"783 HP", weight:"95,000 kg", application:"Perforación y voladura", arMarker:"perforadora" },
+      { name:"Perforadora Rotativa", group:"Equipamiento", category:"Perforación", image:"./assets/perforadora.png", description:"Equipo de perforación de alto rendimiento para barrenos de voladura. Sistema rotativo de precisión para operaciones de exploración y extracción.", capacity:"311 mm diámetro", power:"783 HP", weight:"95,000 kg", application:"Perforación y voladura", arMarker:"perforadora" },
       
-      { name:"Casco Minero", group:"Equipamiento", category:"Seguridad", image:"/assets/lamp.png", description:"Casco de seguridad certificado con lámpara integrada. Protección contra impactos y penetración. Cumple con estándares internacionales de seguridad minera.", capacity:"Ajustable", power:"LED 5W", weight:"450 g", application:"Protección personal", arMarker:"casco" },
+      { name:"Casco Minero", group:"Equipamiento", category:"Seguridad", image:"./assets/lamp.png", description:"Casco de seguridad certificado con lámpara integrada. Protección contra impactos y penetración. Cumple con estándares internacionales de seguridad minera.", capacity:"Ajustable", power:"LED 5W", weight:"450 g", application:"Protección personal", arMarker:"casco" },
       
-      { name:"Pico Minero", group:"Equipamiento", category:"Herramientas", image:"/assets/pico.png", description:"Herramienta tradicional de acero forjado para extracción manual. Diseño ergonómico para trabajos de precisión en minería artesanal y mantenimiento.", capacity:"90 cm largo", power:"Manual", weight:"3.2 kg", application:"Extracción manual", arMarker:"pico" },
+      { name:"Pico Minero", group:"Equipamiento", category:"Herramientas", image:"./assets/pico.png", description:"Herramienta tradicional de acero forjado para extracción manual. Diseño ergonómico para trabajos de precisión en minería artesanal y mantenimiento.", capacity:"90 cm largo", power:"Manual", weight:"3.2 kg", application:"Extracción manual", arMarker:"pico" },
 
-      { name:"Rodillo Compactador", group:"Transporte", category:"Transporte", image:"/assets/truck.png", description:"Vehículo de carga pesada para transporte de mineral. Sistema hidráulico de alta capacidad para operaciones de gran escala.", capacity:"50 t", power:"850 HP", weight:"120,000 kg", application:"Transporte de material", arMarker:"truck" },
+      { name:"Rodillo Compactador", group:"Transporte", category:"Transporte", image:"./assets/truck.png", description:"Vehículo de carga pesada para transporte de mineral. Sistema hidráulico de alta capacidad para operaciones de gran escala.", capacity:"50 t", power:"850 HP", weight:"120,000 kg", application:"Transporte de material", arMarker:"truck" },
 
-      { name:"Mineral de Oro", group:"Minerales", category:"Metales Preciosos", image:"/assets/recoger.png", description:"Muestra de mineral de oro nativo con vetas de cuarzo. Metal precioso de alta conductividad y resistencia a la corrosión. Utilizado en joyería, electrónica e inversiones.", capacity:"99.9% pureza", power:"N/A", weight:"19.3 g/cm³", application:"Extracción y refinación", arMarker:"oro" },
+      { name:"Mineral de Oro", group:"Minerales", category:"Metales Preciosos", image:"./assets/recoger.png", description:"Muestra de mineral de oro nativo con vetas de cuarzo. Metal precioso de alta conductividad y resistencia a la corrosión. Utilizado en joyería, electrónica e inversiones.", capacity:"99.9% pureza", power:"N/A", weight:"19.3 g/cm³", application:"Extracción y refinación", arMarker:"oro" },
 
-      { name:"Wolframita", group:"Minerales", category:"Minerales Industriales", image:"/assets/recoger.png", description:"Mineral de tungsteno (wolframio) de alta densidad. Principal mena para extracción de tungsteno. Utilizado en herramientas de corte, filamentos y aleaciones de alta temperatura.", capacity:"Fe/Mn WO₄", power:"N/A", weight:"7.5 g/cm³", application:"Industria metalúrgica", arMarker:"wolframita" },
+      { name:"Wolframita", group:"Minerales", category:"Minerales Industriales", image:"./assets/recoger.png", description:"Mineral de tungsteno (wolframio) de alta densidad. Principal mena para extracción de tungsteno. Utilizado en herramientas de corte, filamentos y aleaciones de alta temperatura.", capacity:"Fe/Mn WO₄", power:"N/A", weight:"7.5 g/cm³", application:"Industria metalúrgica", arMarker:"wolframita" },
 
-      { name:"Excavadora Amarilla", group:"Maquinaria", category:"Excavación", image:"/assets/m3.png", description:"Excavadora hidráulica de alto rendimiento con brazo articulado. Sistema de control preciso para excavación, carga y movimiento de tierra en operaciones mineras.", capacity:"3.5 m³", power:"280 HP", weight:"35,000 kg", application:"Excavación y carga", arMarker:"renderamarillo" },
+      { name:"Excavadora Amarilla", group:"Maquinaria", category:"Excavación", image:"./assets/m3.png", description:"Excavadora hidráulica de alto rendimiento con brazo articulado. Sistema de control preciso para excavación, carga y movimiento de tierra en operaciones mineras.", capacity:"3.5 m³", power:"280 HP", weight:"35,000 kg", application:"Excavación y carga", arMarker:"renderamarillo" },
 
       // ⏸️ DESACTIVADOS TEMPORALMENTE - Sin marcadores aún (para integrar después)
       // { name:"Pala Eléctrica", group:"Maquinaria", category:"Excavación", image:"./assets/maquina.png", description:"Pala eléctrica de alto tonelaje para operaciones de carga continua. Sistema eléctrico de alta eficiencia para extracción masiva de mineral.", capacity:"120 m³", power:"6,200 kW", weight:"980,000 kg", application:"Carga de mineral", arMarker:"pala" },
