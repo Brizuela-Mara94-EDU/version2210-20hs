@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <title>Experiencia AR - Dinos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="/AppMindAr/style.css">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
 
@@ -182,7 +182,7 @@
     }
   };
 
-  const roarAudio = new Audio('sounds/roar.mp3');
+  const roarAudio = new Audio('/sounds/roar.mp3');
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   function setupInteractiveControls(model) {
