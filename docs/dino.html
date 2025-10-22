@@ -456,16 +456,19 @@
 
     arContainer.appendChild(sceneEl);
     
+    const baseURL = `${window.location.origin}/AppMindAr/models/`;
+
     const assets = document.createElement('a-assets');
     assets.innerHTML = `
-      <a-asset-item id="brachiosaurus" src="/AppMindAr/models/brachiosaurus.glb"></a-asset-item>
-      <a-asset-item id="trex" src="/AppMindAr/models/trex.glb"></a-asset-item>
-      <a-asset-item id="triceratops" src="/AppMindAr/models/triceratops.glb"></a-asset-item>
-      <a-asset-item id="velociraptor" src="/AppMindAr/models/velociraptor.glb"></a-asset-item>
-      <a-asset-item id="stegosaurio" src="/AppMindAr/models/stegosaurio.glb"></a-asset-item>
-      <a-asset-item id="ankylosaurio" src="/AppMindAr/models/ankylosaurus.glb"></a-asset-item>
+      <a-asset-item id="brachiosaurus" src="${baseURL}brachiosaurus.glb"></a-asset-item>
+      <a-asset-item id="trex" src="${baseURL}trex.glb"></a-asset-item>
+      <a-asset-item id="triceratops" src="${baseURL}triceratops.glb"></a-asset-item>
+      <a-asset-item id="velociraptor" src="${baseURL}velociraptor.glb"></a-asset-item>
+      <a-asset-item id="stegosaurio" src="${baseURL}stegosaurio.glb"></a-asset-item>
+      <a-asset-item id="ankylosaurio" src="${baseURL}ankylosaurus.glb"></a-asset-item>
     `;
     sceneEl.appendChild(assets);
+
 
     const ambientLight = document.createElement('a-light');
     ambientLight.setAttribute('type', 'ambient');
