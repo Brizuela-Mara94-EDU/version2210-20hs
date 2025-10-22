@@ -633,7 +633,7 @@
   <div class="overlay"></div>
 
   <div class="header">
-    <img src="./assets/logo%20sied%20horizontal-02-BF-xqR4y.png" class="header-logo" alt="SIED Logo">
+    <img src="./assets/logo sied horizontal-02-BF-xqR4y.png" class="header-logo" alt="SIED Logo">
     <button class="close-btn" id="closeBtn" title="Cerrar">✕</button>
   </div>
 
@@ -695,7 +695,7 @@
 
   <script>
     // Configurar base URL para GitHub Pages ANTES de inicializar A-Frame
-    window.BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '' : '/AppMindAr/';
+    window.BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '' : '/version2210-20hs/';
     console.log('🔧 Base URL configurada:', window.BASE_URL);
     
     // Registrar componente cuando A-Frame esté disponible
@@ -743,8 +743,7 @@
     embedded
     arjs="
       sourceType: webcam;
-      detectionMode: mono_and_matrix;
-      matrixCodeType: 3x3;
+      detectionMode: mono;
       debugUIEnabled: false;
     "
   >
@@ -753,7 +752,7 @@
       <a-entity 
         id="model20"
         class="ar-model"
-        gh-pages-model="models/lamp.glb" 
+        gh-pages-model="arjs/models/lamp.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -765,7 +764,7 @@
       <a-entity 
         id="model21"
         class="ar-model"
-        gh-pages-model="models/pico.glb" 
+        gh-pages-model="arjs/models/pico.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -777,7 +776,7 @@
       <a-entity 
         id="model22"
         class="ar-model"
-        gh-pages-model="models/truck.glb" 
+        gh-pages-model="arjs/models/truck.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -789,7 +788,7 @@
       <a-entity 
         id="model23"
         class="ar-model"
-        gh-pages-model="models/tunel.glb" 
+        gh-pages-model="arjs/models/tunel.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -801,7 +800,7 @@
       <a-entity 
         id="model24"
         class="ar-model"
-        gh-pages-model="models/garras.glb" 
+        gh-pages-model="arjs/models/garras.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -813,7 +812,7 @@
       <a-entity 
         id="model25"
         class="ar-model"
-        gh-pages-model="models/perforadora.glb" 
+        gh-pages-model="arjs/models/perforadora.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -825,7 +824,7 @@
       <a-entity 
         id="model26"
         class="ar-model"
-        gh-pages-model="models/carga.glb" 
+        gh-pages-model="arjs/models/carga.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -837,7 +836,7 @@
       <a-entity 
         id="model27"
         class="ar-model"
-        gh-pages-model="models/oro.glb" 
+        gh-pages-model="arjs/models/oro.glb" 
         scale="0.3 0.3 0.3" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -849,7 +848,7 @@
       <a-entity 
         id="model28"
         class="ar-model"
-        gh-pages-model="models/wolframita.glb" 
+        gh-pages-model="arjs/models/wolframita.glb" 
         scale="0.3 0.3 0.3" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -861,7 +860,7 @@
       <a-entity 
         id="model32"
         class="ar-model"
-        gh-pages-model="models/renderamarillo.glb" 
+        gh-pages-model="arjs/models/renderamarillo.glb" 
         scale="0.4 0.4 0.4" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -979,14 +978,16 @@
         }
       }, 5000);
 
-      // Detectar marcadores
-      for (let i = 20; i <= 26; i++) {
+      // Detectar marcadores (20-28 y 32)
+      const markerIds = [20, 21, 22, 23, 24, 25, 26, 27, 28, 32];
+      
+      markerIds.forEach(i => {
         const marker = document.getElementById(`marker${i}`);
         const model = document.getElementById(`model${i}`);
         
         if (!marker || !model) {
           console.warn(`⚠️ No se encontró marcador ${i} o modelo ${i}`);
-          continue;
+          return;
         }
         
         console.log(`📋 Marcador ${i} y modelo ${i} encontrados en DOM`);
@@ -1058,7 +1059,7 @@
             modelInfo.classList.remove('active');
           }
         });
-      }
+      });
 
       // Controles de zoom (Desktop)
       const zoomIn = document.getElementById('zoomIn');
