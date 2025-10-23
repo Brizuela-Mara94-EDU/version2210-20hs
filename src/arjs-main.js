@@ -305,7 +305,7 @@ window.startScanner = async () => {
       // Cubo de fallback
       const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
       const material = new THREE.MeshPhongMaterial({ 
-        color: 0xd81e27,
+        color: 0x153B82,
         shininess: 100 
       });
       model3D = new THREE.Mesh(geometry, material);
