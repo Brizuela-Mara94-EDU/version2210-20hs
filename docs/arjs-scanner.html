@@ -26,6 +26,41 @@
       position: fixed;
       width: 100%;
       height: 100%;
+      touch-action: none;
+    }
+
+    /* Asegurar que el video de AR.js cubra toda la pantalla */
+    #arjs-video {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      min-width: 100% !important;
+      min-height: 100% !important;
+      width: auto !important;
+      height: auto !important;
+      z-index: 0 !important;
+      object-fit: cover !important;
+    }
+
+    /* Canvas de A-Frame debe cubrir toda la pantalla */
+    .a-canvas {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1 !important;
+    }
+
+    /* Contenedor de la escena A-Frame */
+    a-scene {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 0 !important;
     }
 
     .hidden {
@@ -639,8 +674,8 @@
   </div>
 
   <div class="mobile-hint" id="mobileHint" style="display: none;">
-    <div style="font-size: 11px; opacity: 0.8; margin-bottom: 4px;">CONTROLES:</div>
-    <div style="font-size: 12px;">🖐️ 1 dedo: Rotar | 🤏 2 dedos: Zoom</div>
+    <div style="font-size: 11px; opacity: 0.8; margin-bottom: 4px;">CONTROLES TÁCTILES:</div>
+    <div style="font-size: 12px;">� 1 dedo: Rotar 360° | 🤏 2 dedos: Zoom</div>
   </div>
 
   <div class="model-info" id="modelInfo">
@@ -696,7 +731,7 @@
       <a-entity 
         id="model20"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/lamp.glb" 
+        gltf-model="/AppMindAr/models/lamp.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -708,7 +743,7 @@
       <a-entity 
         id="model21"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/pico.glb" 
+        gltf-model="/AppMindAr/models/pico.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -720,7 +755,7 @@
       <a-entity 
         id="model22"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/truck.glb" 
+        gltf-model="/AppMindAr/models/truck.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -732,7 +767,7 @@
       <a-entity 
         id="model23"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/tunel.glb" 
+        gltf-model="/AppMindAr/models/tunel.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -744,7 +779,7 @@
       <a-entity 
         id="model24"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/garras.glb" 
+        gltf-model="/AppMindAr/models/garras.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -756,7 +791,7 @@
       <a-entity 
         id="model25"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/perforadora.glb" 
+        gltf-model="/AppMindAr/models/perforadora.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -768,7 +803,7 @@
       <a-entity 
         id="model26"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/carga.glb" 
+        gltf-model="/AppMindAr/models/carga.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -780,7 +815,7 @@
       <a-entity 
         id="model27"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/oro.glb" 
+        gltf-model="/AppMindAr/models/oro.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -792,7 +827,7 @@
       <a-entity 
         id="model28"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/wolframita.glb" 
+        gltf-model="/AppMindAr/models/wolframita.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -804,7 +839,7 @@
       <a-entity 
         id="model29"
         class="ar-model"
-        gltf-model="/version2210-20hs/models/renderamarillo.glb" 
+        gltf-model="/AppMindAr/models/renderamarillo.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -823,6 +858,14 @@
     let lastDetectedMarker = null;
     let persistentModel = null;
     let markerDetectedOnce = false;
+
+    // Variables para controles táctiles
+    let isTouching = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+    let lastPinchDistance = 0;
+    const MIN_SCALE = 0.1;
+    const MAX_SCALE = 3.0;
 
     // Mapeo de nombres de modelos
     const modelNames = {
@@ -859,11 +902,11 @@
           mobileHint.style.display = 'block';
           setTimeout(() => {
             mobileHint.style.opacity = '0';
-            mobileHint.style.transition = 'opacity 1s';
+            mobileHint.style.transition = 'opacity 1.5s';
             setTimeout(() => {
               mobileHint.style.display = 'none';
-            }, 1000);
-          }, 5000);
+            }, 1500);
+          }, 7000); // Mostrar por 7 segundos
         }, 2000);
       }
 
@@ -1137,21 +1180,31 @@
         let touchStartDist = 0;
         let touchStartScale = currentScale;
         let touchStartRotY = 0;
+        let touchStartRotX = 0;
         let lastTouchY = 0;
+        let lastTouchX = 0;
+        let isSingleTouch = false;
 
         scene.addEventListener('touchstart', (e) => {
-          if (!currentModel) return;
+          const targetModel = persistentModel || currentModel;
+          if (!targetModel) return;
           
           if (e.touches.length === 2) {
-            // Pinch zoom
+            // Pinch zoom con dos dedos
+            isSingleTouch = false;
             const dx = e.touches[0].pageX - e.touches[1].pageX;
             const dy = e.touches[0].pageY - e.touches[1].pageY;
             touchStartDist = Math.sqrt(dx * dx + dy * dy);
             touchStartScale = currentScale;
+            console.log('🤏 Inicio pinch zoom');
           } else if (e.touches.length === 1) {
-            // Rotación
+            // Rotación 360° con un dedo
+            isSingleTouch = true;
             touchStartRotY = currentRotation.y;
+            touchStartRotX = currentRotation.x;
+            lastTouchX = e.touches[0].pageX;
             lastTouchY = e.touches[0].pageY;
+            console.log('👆 Inicio rotación táctil');
           }
         });
 
@@ -1160,26 +1213,46 @@
           if (!targetModel) return;
           e.preventDefault();
           
-          if (e.touches.length === 2) {
+          if (e.touches.length === 2 && !isSingleTouch) {
             // Pinch zoom
             const dx = e.touches[0].pageX - e.touches[1].pageX;
             const dy = e.touches[0].pageY - e.touches[1].pageY;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            const scaleFactor = dist / touchStartDist;
-            currentScale = Math.max(0.1, Math.min(3.0, touchStartScale * scaleFactor));
-            targetModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
-            if (zoomLevel) zoomLevel.textContent = `${currentScale.toFixed(1)}x`;
-          } else if (e.touches.length === 1) {
-            // Rotación horizontal
-            const deltaX = e.touches[0].pageX - window.innerWidth / 2;
-            currentRotation.y = touchStartRotY + (deltaX * 0.5);
             
-            // Rotación vertical
+            if (touchStartDist > 0) {
+              const scaleFactor = dist / touchStartDist;
+              currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, touchStartScale * scaleFactor));
+              targetModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
+              
+              if (zoomLevel) {
+                zoomLevel.textContent = `${currentScale.toFixed(1)}x`;
+              }
+            }
+          } else if (e.touches.length === 1 && isSingleTouch) {
+            // Rotación 360° con un dedo (horizontal y vertical)
+            const deltaX = e.touches[0].pageX - lastTouchX;
             const deltaY = e.touches[0].pageY - lastTouchY;
-            currentRotation.x -= deltaY * 0.5;
-            lastTouchY = e.touches[0].pageY;
+            
+            // Rotación horizontal (Y-axis) - más sensible
+            currentRotation.y += deltaX * 0.5;
+            
+            // Rotación vertical (X-axis) - más sensible
+            currentRotation.x += deltaY * 0.5;
+            
+            // Limitar rotación vertical para evitar volteretas extrañas
+            currentRotation.x = Math.max(-180, Math.min(0, currentRotation.x));
             
             targetModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+            
+            lastTouchX = e.touches[0].pageX;
+            lastTouchY = e.touches[0].pageY;
+          }
+        }, { passive: false });
+
+        scene.addEventListener('touchend', (e) => {
+          if (e.touches.length === 0) {
+            isSingleTouch = false;
+            console.log('✋ Fin interacción táctil');
           }
         });
       }
