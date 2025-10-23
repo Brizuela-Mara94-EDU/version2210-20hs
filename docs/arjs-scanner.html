@@ -649,7 +649,7 @@
   </div>
 
   <div class="instructions" id="instructions">
-    Apunta la cámara hacia el marcador barcode (20-28, 32)
+    Apunta la cámara hacia el marcador barcode (20-29)
   </div>
 
   <div class="mobile-hint" id="mobileHint" style="display: none;">
@@ -694,46 +694,7 @@
   </button>
 
   <script>
-    // Configurar base URL para GitHub Pages ANTES de inicializar A-Frame
-    window.BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '' : '/version2210-20hs/';
-    console.log('🔧 Base URL configurada:', window.BASE_URL);
-    
-    // Registrar componente cuando A-Frame esté disponible
-    if (typeof AFRAME !== 'undefined') {
-      console.log('✅ A-Frame detectado, registrando componente...');
-      registerGHPagesComponent();
-    } else {
-      // Esperar a que A-Frame se cargue
-      document.addEventListener('DOMContentLoaded', function() {
-        if (typeof AFRAME !== 'undefined') {
-          console.log('✅ A-Frame cargado, registrando componente...');
-          registerGHPagesComponent();
-        }
-      });
-    }
-    
-    function registerGHPagesComponent() {
-      AFRAME.registerComponent('gh-pages-model', {
-        schema: { type: 'string' },
-        init: function () {
-          const modelPath = this.data;
-          const fullPath = window.BASE_URL + modelPath;
-          console.log('📦 Intentando cargar modelo desde:', fullPath);
-          this.el.setAttribute('gltf-model', fullPath);
-          
-          // Listener para errores de carga
-          this.el.addEventListener('model-error', function(e) {
-            console.error('❌ Error al cargar modelo:', fullPath, e);
-          });
-          
-          // Listener para carga exitosa
-          this.el.addEventListener('model-loaded', function(e) {
-            console.log('✅ Modelo cargado exitosamente:', fullPath);
-          });
-        }
-      });
-      console.log('✅ Componente gh-pages-model registrado');
-    }
+    console.log('🎬 Inicializando AR.js Scanner...');
   </script>
 
   <!-- A-Frame Scene -->
@@ -752,7 +713,7 @@
       <a-entity 
         id="model20"
         class="ar-model"
-        gh-pages-model="arjs/models/lamp.glb" 
+        gltf-model="./arjs/models/lamp.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -764,7 +725,7 @@
       <a-entity 
         id="model21"
         class="ar-model"
-        gh-pages-model="arjs/models/pico.glb" 
+        gltf-model="./arjs/models/pico.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -776,7 +737,7 @@
       <a-entity 
         id="model22"
         class="ar-model"
-        gh-pages-model="arjs/models/truck.glb" 
+        gltf-model="./arjs/models/truck.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -788,7 +749,7 @@
       <a-entity 
         id="model23"
         class="ar-model"
-        gh-pages-model="arjs/models/tunel.glb" 
+        gltf-model="./arjs/models/tunel.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -800,7 +761,7 @@
       <a-entity 
         id="model24"
         class="ar-model"
-        gh-pages-model="arjs/models/garras.glb" 
+        gltf-model="./arjs/models/garras.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -812,7 +773,7 @@
       <a-entity 
         id="model25"
         class="ar-model"
-        gh-pages-model="arjs/models/perforadora.glb" 
+        gltf-model="./arjs/models/perforadora.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -824,7 +785,7 @@
       <a-entity 
         id="model26"
         class="ar-model"
-        gh-pages-model="arjs/models/carga.glb" 
+        gltf-model="./arjs/models/carga.glb" 
         scale="0.5 0.5 0.5" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -836,7 +797,7 @@
       <a-entity 
         id="model27"
         class="ar-model"
-        gh-pages-model="arjs/models/oro.glb" 
+        gltf-model="./arjs/models/oro.glb" 
         scale="0.3 0.3 0.3" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -848,19 +809,19 @@
       <a-entity 
         id="model28"
         class="ar-model"
-        gh-pages-model="arjs/models/wolframita.glb" 
+        gltf-model="./arjs/models/wolframita.glb" 
         scale="0.3 0.3 0.3" 
         position="0 0 0"
         rotation="-90 0 0"
       ></a-entity>
     </a-marker>
 
-    <!-- Marcador 32: Excavadora Amarilla -->
-    <a-marker id="marker32" type="barcode" value="32">
+    <!-- Marcador 29: Excavadora Amarilla -->
+    <a-marker id="marker29" type="barcode" value="29">
       <a-entity 
-        id="model32"
+        id="model29"
         class="ar-model"
-        gh-pages-model="arjs/models/renderamarillo.glb" 
+        gltf-model="./arjs/models/renderamarillo.glb" 
         scale="0.4 0.4 0.4" 
         position="0 0 0"
         rotation="-90 0 0"
@@ -891,7 +852,7 @@
       26: 'Carga',
       27: 'Mineral de Oro',
       28: 'Wolframita',
-      32: 'Excavadora Amarilla'
+      29: 'Excavadora Amarilla'
     };
 
     // Inicializar al cargar la página
@@ -978,8 +939,8 @@
         }
       }, 5000);
 
-      // Detectar marcadores (20-28 y 32)
-      const markerIds = [20, 21, 22, 23, 24, 25, 26, 27, 28, 32];
+      // Detectar marcadores (20-29)
+      const markerIds = [20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
       
       markerIds.forEach(i => {
         const marker = document.getElementById(`marker${i}`);

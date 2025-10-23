@@ -78,7 +78,7 @@ window.startScanner = async () => {
     console.log('✅ AR.js disponible');
 
     // Mapeo de marcadores a barcode IDs (matriz 3x3)
-    // Los marcadores están en la carpeta markets/ con IDs: 20-28, 32
+    // Los marcadores están en la carpeta markets/ con IDs: 20-29
     const barcodeMapping = {
       casco: 20,        // 20.png = lamp/casco
       pico: 21,         // 21.png = pico
@@ -89,7 +89,7 @@ window.startScanner = async () => {
       camion: 26,       // 26.png = carga/camión minero
       oro: 27,          // 27.png = mineral de oro
       wolframita: 28,   // 28.png = wolframita
-      renderamarillo: 32 // 32.png = excavadora amarilla
+      renderamarillo: 29 // 29.png = excavadora amarilla
     };
 
     // Mapeo de marcadores a modelos 3D
