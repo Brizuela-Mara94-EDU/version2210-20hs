@@ -955,13 +955,13 @@
 
         marker.addEventListener('markerFound', function() {
           console.log(`🎯 Marcador ${i} DETECTADO!`);
-          console.log(`   - Modelo visible:`, model.object3D.visible);
-          console.log(`   - Atributo gltf-model:`, model.getAttribute('gltf-model') || model.getAttribute('gh-pages-model'));
+          console.log(`   - Modelo visible:`, model.object3D ? model.object3D.visible : 'object3D no disponible');
+          console.log(`   - Atributo gltf-model:`, model.getAttribute('gltf-model'));
           
-          // Asegurarse de que el modelo sea visible
+          // Asegurarse de que el modelo original sea visible
           if (model.object3D) {
             model.object3D.visible = true;
-            console.log('✅ Modelo visible establecido a true');
+            console.log('✅ Modelo original visible establecido a true');
           }
           
           if (!markerDetectedOnce) {
@@ -970,27 +970,52 @@
             markerPersistent = true;
             lastDetectedMarker = i;
             
-            // Crear modelo persistente
-            if (!persistentModel) {
-              const camera = scene.querySelector('[camera]');
-              if (camera) {
-                // Clonar el modelo y adjuntarlo a la cámara
-                persistentModel = model.cloneNode(true);
-                persistentModel.setAttribute('position', '0 -0.5 -2');
-                persistentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
-                persistentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
-                
-                // Asegurar visibilidad del modelo persistente
-                if (persistentModel.object3D) {
-                  persistentModel.object3D.visible = true;
+            // Esperar a que el modelo esté completamente cargado antes de crear persistencia
+            const setupPersistence = () => {
+              if (!persistentModel && model.object3D && model.object3D.children.length > 0) {
+                console.log('🔄 Configurando persistencia del modelo...');
+                const camera = scene.querySelector('[camera]');
+                if (camera) {
+                  // Crear nuevo entity para el modelo persistente
+                  persistentModel = document.createElement('a-entity');
+                  
+                  // Copiar el path del modelo
+                  const modelPath = model.getAttribute('gltf-model');
+                  persistentModel.setAttribute('gltf-model', modelPath);
+                  
+                  // Configurar posición relativa a la cámara
+                  persistentModel.setAttribute('position', '0 -0.5 -2');
+                  persistentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
+                  persistentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+                  
+                  // Esperar a que el modelo persistente se cargue
+                  persistentModel.addEventListener('model-loaded', function() {
+                    console.log('✅ Modelo persistente cargado completamente');
+                    if (persistentModel.object3D) {
+                      persistentModel.object3D.visible = true;
+                    }
+                  });
+                  
+                  // Adjuntar a la cámara
+                  camera.appendChild(persistentModel);
+                  currentModel = persistentModel;
+                  
+                  console.log('✅ Modelo persistente creado y anclado a la cámara');
+                  console.log('   - Path:', modelPath);
+                  console.log('   - Posición:', persistentModel.getAttribute('position'));
+                  console.log('   - Escala:', persistentModel.getAttribute('scale'));
+                } else {
+                  console.error('❌ No se encontró la cámara');
                 }
-                
-                camera.appendChild(persistentModel);
-                currentModel = persistentModel;
-                
-                console.log('✅ Modelo persistente creado y anclado a la cámara');
+              } else if (!model.object3D || model.object3D.children.length === 0) {
+                console.log('⏳ Esperando a que el modelo se cargue completamente...');
+                // Reintentar después de un breve delay
+                setTimeout(setupPersistence, 200);
               }
-            }
+            };
+            
+            // Intentar configurar persistencia
+            setupPersistence();
           }
           
           statusText.textContent = '¡Marcador detectado!';
@@ -1012,9 +1037,19 @@
         marker.addEventListener('markerLost', function() {
           console.log(`❌ Marcador ${i} perdido`);
           
+          // Ocultar el modelo original del marcador
+          if (model.object3D) {
+            model.object3D.visible = false;
+          }
+          
           if (markerPersistent && persistentModel) {
-            statusText.textContent = 'Modelo persistente (ya no necesitas el marcador)';
-            console.log('✅ Modelo sigue visible sin marcador');
+            statusText.textContent = '✓ Modelo anclado (ya no necesitas el marcador)';
+            console.log('✅ Modelo persistente sigue visible sin marcador');
+            
+            // Asegurar que el modelo persistente esté visible
+            if (persistentModel.object3D) {
+              persistentModel.object3D.visible = true;
+            }
           } else {
             statusText.textContent = 'Marcador perdido - Buscando...';
             modelInfo.classList.remove('active');
