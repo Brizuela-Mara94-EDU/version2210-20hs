@@ -838,7 +838,6 @@
     let currentRotation = { x: -90, y: 0, z: 0 };
     let markerPersistent = false;
     let lastDetectedMarker = null;
-    let persistentModel = null;
     let markerDetectedOnce = false;
 
     // Mapeo de nombres de modelos
@@ -894,13 +893,12 @@
         resetScanBtn.addEventListener('click', () => {
           console.log('🔄 Reseteando escáner...');
           
-          // Eliminar modelo persistente
-          if (persistentModel && persistentModel.parentNode) {
-            persistentModel.parentNode.removeChild(persistentModel);
+          // Ocultar modelo actual
+          if (currentModel && currentModel.object3D) {
+            currentModel.object3D.visible = false;
           }
           
           // Resetear estado
-          persistentModel = null;
           currentModel = null;
           markerDetectedOnce = false;
           markerPersistent = false;
@@ -955,67 +953,19 @@
 
         marker.addEventListener('markerFound', function() {
           console.log(`🎯 Marcador ${i} DETECTADO!`);
-          console.log(`   - Modelo visible:`, model.object3D ? model.object3D.visible : 'object3D no disponible');
-          console.log(`   - Atributo gltf-model:`, model.getAttribute('gltf-model'));
           
-          // Asegurarse de que el modelo original sea visible
-          if (model.object3D) {
-            model.object3D.visible = true;
-            console.log('✅ Modelo original visible establecido a true');
-          }
-          
+          // Marcar que se detectó al menos una vez
           if (!markerDetectedOnce) {
-            // Primera detección: configurar persistencia
             markerDetectedOnce = true;
             markerPersistent = true;
             lastDetectedMarker = i;
-            
-            // Esperar a que el modelo esté completamente cargado antes de crear persistencia
-            const setupPersistence = () => {
-              if (!persistentModel && model.object3D && model.object3D.children.length > 0) {
-                console.log('🔄 Configurando persistencia del modelo...');
-                const camera = scene.querySelector('[camera]');
-                if (camera) {
-                  // Crear nuevo entity para el modelo persistente
-                  persistentModel = document.createElement('a-entity');
-                  
-                  // Copiar el path del modelo
-                  const modelPath = model.getAttribute('gltf-model');
-                  persistentModel.setAttribute('gltf-model', modelPath);
-                  
-                  // Configurar posición relativa a la cámara
-                  persistentModel.setAttribute('position', '0 -0.5 -2');
-                  persistentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
-                  persistentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
-                  
-                  // Esperar a que el modelo persistente se cargue
-                  persistentModel.addEventListener('model-loaded', function() {
-                    console.log('✅ Modelo persistente cargado completamente');
-                    if (persistentModel.object3D) {
-                      persistentModel.object3D.visible = true;
-                    }
-                  });
-                  
-                  // Adjuntar a la cámara
-                  camera.appendChild(persistentModel);
-                  currentModel = persistentModel;
-                  
-                  console.log('✅ Modelo persistente creado y anclado a la cámara');
-                  console.log('   - Path:', modelPath);
-                  console.log('   - Posición:', persistentModel.getAttribute('position'));
-                  console.log('   - Escala:', persistentModel.getAttribute('scale'));
-                } else {
-                  console.error('❌ No se encontró la cámara');
-                }
-              } else if (!model.object3D || model.object3D.children.length === 0) {
-                console.log('⏳ Esperando a que el modelo se cargue completamente...');
-                // Reintentar después de un breve delay
-                setTimeout(setupPersistence, 200);
-              }
-            };
-            
-            // Intentar configurar persistencia
-            setupPersistence();
+            currentModel = model;
+            console.log('✅ Primera detección - modelo ahora es persistente');
+          }
+          
+          // Asegurarse de que el modelo sea visible
+          if (model.object3D) {
+            model.object3D.visible = true;
           }
           
           statusText.textContent = '¡Marcador detectado!';
@@ -1026,31 +976,24 @@
           if (resetScanBtn) {
             resetScanBtn.classList.add('visible');
           }
-          
-          // Si ya existe el modelo persistente, actualizarlo
-          if (persistentModel) {
-            persistentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
-            persistentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
-          }
         });
 
         marker.addEventListener('markerLost', function() {
           console.log(`❌ Marcador ${i} perdido`);
           
-          // Ocultar el modelo original del marcador
-          if (model.object3D) {
-            model.object3D.visible = false;
-          }
-          
-          if (markerPersistent && persistentModel) {
-            statusText.textContent = '✓ Modelo anclado (ya no necesitas el marcador)';
-            console.log('✅ Modelo persistente sigue visible sin marcador');
-            
-            // Asegurar que el modelo persistente esté visible
-            if (persistentModel.object3D) {
-              persistentModel.object3D.visible = true;
+          // SI YA SE DETECTÓ UNA VEZ, MANTENER EL MODELO VISIBLE
+          if (markerDetectedOnce && markerPersistent) {
+            // NO ocultar el modelo, mantenerlo visible
+            if (model.object3D) {
+              model.object3D.visible = true;
             }
+            statusText.textContent = '✓ Modelo anclado (ya no necesitas el marcador)';
+            console.log('✅ Modelo se mantiene visible - modo persistente activo');
           } else {
+            // Solo ocultar si nunca se detectó
+            if (model.object3D) {
+              model.object3D.visible = false;
+            }
             statusText.textContent = 'Marcador perdido - Buscando...';
             modelInfo.classList.remove('active');
           }
@@ -1064,20 +1007,18 @@
 
       if (zoomIn) {
         zoomIn.addEventListener('click', () => {
-          if (!persistentModel && !currentModel) return;
+          if (!currentModel) return;
           currentScale = Math.min(currentScale + 0.1, 3.0);
-          const targetModel = persistentModel || currentModel;
-          targetModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
+          currentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
           zoomLevel.textContent = `${currentScale.toFixed(1)}x`;
         });
       }
 
       if (zoomOut) {
         zoomOut.addEventListener('click', () => {
-          if (!persistentModel && !currentModel) return;
+          if (!currentModel) return;
           currentScale = Math.max(currentScale - 0.1, 0.1);
-          const targetModel = persistentModel || currentModel;
-          targetModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
+          currentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
           zoomLevel.textContent = `${currentScale.toFixed(1)}x`;
         });
       }
@@ -1091,48 +1032,43 @@
 
       if (rotateUp) {
         rotateUp.addEventListener('click', () => {
-          const targetModel = persistentModel || currentModel;
-          if (!targetModel) return;
+          if (!currentModel) return;
           currentRotation.x += 15;
-          targetModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+          currentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
         });
       }
 
       if (rotateDown) {
         rotateDown.addEventListener('click', () => {
-          const targetModel = persistentModel || currentModel;
-          if (!targetModel) return;
+          if (!currentModel) return;
           currentRotation.x -= 15;
-          targetModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+          currentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
         });
       }
 
       if (rotateLeft) {
         rotateLeft.addEventListener('click', () => {
-          const targetModel = persistentModel || currentModel;
-          if (!targetModel) return;
+          if (!currentModel) return;
           currentRotation.y += 15;
-          targetModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+          currentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
         });
       }
 
       if (rotateRight) {
         rotateRight.addEventListener('click', () => {
-          const targetModel = persistentModel || currentModel;
-          if (!targetModel) return;
+          if (!currentModel) return;
           currentRotation.y -= 15;
-          targetModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+          currentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
         });
       }
 
       if (rotateReset) {
         rotateReset.addEventListener('click', () => {
-          const targetModel = persistentModel || currentModel;
-          if (!targetModel) return;
+          if (!currentModel) return;
           currentRotation = { x: -90, y: 0, z: 0 };
           currentScale = 0.5;
-          targetModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
-          targetModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
+          currentModel.setAttribute('rotation', `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+          currentModel.setAttribute('scale', `${currentScale} ${currentScale} ${currentScale}`);
           zoomLevel.textContent = `${currentScale.toFixed(1)}x`;
         });
       }
