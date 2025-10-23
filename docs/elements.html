@@ -914,10 +914,10 @@
     let url;
     if (selectedMode === 'mindar') {
       // Usar scanner.html para MindAR (marcadores compilados)
-      url = `scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
+      url = `./scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
     } else if (selectedMode === 'arjs') {
       // Usar arjs-scanner.html para AR.js (códigos de barras)
-      url = `arjs-scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
+      url = `./arjs-scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
     }
     
     window.location.href = url;
@@ -988,9 +988,9 @@
 
         let url;
         if (selectedMode === 'mindar') {
-          url = `arjs/scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
+          url = `./scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
         } else if (selectedMode === 'arjs') {
-          url = `arjs/arjs-scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
+          url = `./arjs-scanner.html?marker=${m.arMarker}&name=${encodeURIComponent(m.name)}`;
         }
         
         window.location.href = url;
